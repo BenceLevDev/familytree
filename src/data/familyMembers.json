@@ -1,16 +1,15 @@
 [
   {
     "id": 1,
-    "last_name": "Lévai",
-    "first_name": "Bence",
+    "last_name": "Gipsz",
+    "first_name": "Jakab",
     "gender": "male",
-    "image": "/src/assets/levai_bence.png"
+    "image": "/src/assets/prof_pic.png"
   },
   {
     "id": 2,
-    "last_name": "Lévai-Oláh",
+    "last_name": "Gipszné",
     "first_name": "Dóra Emese",
-    "gender": "female",
-    "image": "/src/assets/levai_bence.png"
+    "gender": "female"
   }
 ]

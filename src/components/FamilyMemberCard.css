@@ -24,10 +24,12 @@
 }
 .family-member-info-wo-img {
   display: flex;
-  flex-direction: row; /* Egymás mellé kerüljön a két név */
+  flex-direction: column; /* Egymás mellé kerüljön a két név */
   font-size: 28px;
+  padding-left: 40px;
   flex-grow: 1; /* Kitölti a maradék helyet, hogy az ikon a szélére kerüljön */
   gap: 10px;
+  text-align: start;
 }
 
 .family-member-card.male {
