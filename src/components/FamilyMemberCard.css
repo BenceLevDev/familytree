@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+.family-member-card {
+  /* Alapméretek és színek */
+  background-color: #004a8d;
+  color: white;
+  width: 300px;
+  height: 100px;
+  padding: 20px;
+  border-radius: 40px; /* Nagy lekerekítés a sarkoknak */
+  border: 2px solid #999; /* Vékony szürke keret */
+
+  /* Elrendezés Flexbox-szal */
+  display: flex;
+  align-items: center; /* Függőlegesen középre zárás */
+  gap: 20px; /* Elemek közötti távolság */
+  font-family: "Montserrat", sans-serif;
+}
+
+.family-member-info-w-img {
+  display: flex;
+  flex-direction: column; /* Egymás alá kerüljön a két név */
+  font-size: 28px;
+  flex-grow: 1; /* Kitölti a maradék helyet, hogy az ikon a szélére kerüljön */
+}
+.family-member-info-wo-img {
+  display: flex;
+  flex-direction: row; /* Egymás mellé kerüljön a két név */
+  font-size: 28px;
+  flex-grow: 1; /* Kitölti a maradék helyet, hogy az ikon a szélére kerüljön */
+  gap: 10px;
+}
+
+.family-member-card.male {
+  background-color: #044c8b; /* light blue */
+}
+
+.family-member-card.female {
+  background-color: #87126e; /* light pink */
+}
+
+.family-member-card img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #add8e6;
+
+  object-fit: cover;
+  object-position: center;
+
+  flex-shrink: 0;
+}
+
+/* info gomb stílusa */
+.family-member-card button {
+  min-width: 45px;
+  min-height: 45px;
+  border-radius: 50%;
+  border: 2px solid #999;
+  background: transparent;
+  color: #999;
+  font-size: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}

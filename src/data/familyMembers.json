@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "last_name": "Lévai",
+    "first_name": "Bence",
+    "gender": "male",
+    "image": "/src/assets/levai_bence.png"
+  },
+  {
+    "id": 2,
+    "last_name": "Lévai-Oláh",
+    "first_name": "Dóra Emese",
+    "gender": "female",
+    "image": "/src/assets/levai_bence.png"
+  }
+]
