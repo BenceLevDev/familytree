@@ -2,94 +2,166 @@
   "members": [
     {
       "id": 1,
-      "last_name": "Gipsz",
-      "first_name": "Jakab",
+      "last_name": "Kovács",
+      "first_name": "Béla",
       "gender": "male",
-      "image": "/src/assets/prof_pic.png",
       "generation": 1
     },
     {
       "id": 2,
-      "last_name": "Gipszné",
-      "first_name": "Dóra Emese",
+      "last_name": "Szabó",
+      "first_name": "Erzsébet",
       "gender": "female",
       "generation": 1
     },
+
     {
       "id": 3,
-      "first_name": "Péter",
-      "last_name": "Gipsz",
+      "last_name": "Kovács",
+      "first_name": "Zoltán",
       "gender": "male",
       "generation": 2
     },
     {
       "id": 4,
-      "last_name": "Gipsz",
-      "first_name": "András",
-      "gender": "male",
-      "image": "/src/assets/prof_pic.png",
-      "generation": 1
+      "last_name": "Nagy",
+      "first_name": "Ilona",
+      "gender": "female",
+      "generation": 2
     },
     {
       "id": 5,
-      "last_name": "Gipszné",
-      "first_name": "Random Nő",
+      "last_name": "Kovács",
+      "first_name": "Mária",
       "gender": "female",
-      "generation": 1
+      "generation": 2
     },
     {
       "id": 6,
-      "last_name": "Gomb",
-      "first_name": "Erika",
+      "last_name": "Kovács",
+      "first_name": "László",
+      "gender": "male",
+      "generation": 2
+    },
+    {
+      "id": 14,
+      "last_name": "Kiss",
+      "first_name": "Katalin",
       "gender": "female",
-      "generation": 1
+      "generation": 2
     },
     {
       "id": 7,
-      "last_name": "Gipsz",
-      "first_name": "Erika",
+      "last_name": "Kovács",
+      "first_name": "István",
+      "gender": "male",
+      "generation": 2
+    },
+    {
+      "id": 15,
+      "last_name": "Molnár",
+      "first_name": "Zsuzsanna",
       "gender": "female",
       "generation": 2
+    },
+
+    {
+      "id": 9,
+      "last_name": "Kovács",
+      "first_name": "Tamás",
+      "gender": "male",
+      "generation": 3
     },
     {
       "id": 8,
-      "last_name": "Gomb",
-      "first_name": "Erika",
+      "last_name": "Horváth",
+      "first_name": "Petra",
       "gender": "female",
-      "generation": 2
+      "generation": 3
+    },
+    {
+      "id": 10,
+      "last_name": "Kovács",
+      "first_name": "Eszter",
+      "gender": "female",
+      "generation": 3
+    },
+    {
+      "id": 11,
+      "last_name": "Tóth",
+      "first_name": "Gábor",
+      "gender": "male",
+      "generation": 3
+    },
+
+    {
+      "id": 16,
+      "last_name": "Kovács",
+      "first_name": "Attila",
+      "gender": "male",
+      "generation": 3
+    },
+    {
+      "id": 17,
+      "last_name": "Kovács",
+      "first_name": "Krisztina",
+      "gender": "female",
+      "generation": 3
+    },
+
+    {
+      "id": 18,
+      "last_name": "Kovács",
+      "first_name": "Balázs",
+      "gender": "male",
+      "generation": 3
+    },
+    {
+      "id": 19,
+      "last_name": "Kovács",
+      "first_name": "Zsófia",
+      "gender": "female",
+      "generation": 3
+    },
+
+    {
+      "id": 12,
+      "last_name": "Kovács",
+      "first_name": "Bence",
+      "gender": "male",
+      "generation": 4
+    },
+    {
+      "id": 13,
+      "last_name": "Kovács",
+      "first_name": "Dóra",
+      "gender": "female",
+      "generation": 4
     }
   ],
   "relationships": [
-    {
-      "from": 1,
-      "to": 2,
-      "type": "spouse"
-    },
-    {
-      "from": 4,
-      "to": 5,
-      "type": "spouse"
-    },
-    {
-      "from": 1,
-      "to": 3,
-      "type": "parent",
-      "parent1id": 1,
-      "parent2id": 2
-    },
-    {
-      "from": 1,
-      "to": 7,
-      "type": "parent",
-      "parent1id": 1,
-      "parent2id": 2
-    },
-    {
-      "from": 4,
-      "to": 8,
-      "type": "parent",
-      "parent1id": 4,
-      "parent2id": 5
-    }
+    { "from": 1, "to": 2, "type": "spouse" },
+    { "from": 1, "to": 3, "type": "parent", "parent1id": 1, "parent2id": 2 },
+    { "from": 1, "to": 5, "type": "parent", "parent1id": 1, "parent2id": 2 },
+    { "from": 1, "to": 6, "type": "parent", "parent1id": 1, "parent2id": 2 },
+    { "from": 1, "to": 7, "type": "parent", "parent1id": 1, "parent2id": 2 },
+
+    { "from": 3, "to": 4, "type": "spouse" },
+    { "from": 3, "to": 9, "type": "parent", "parent1id": 3, "parent2id": 4 },
+    { "from": 3, "to": 10, "type": "parent", "parent1id": 3, "parent2id": 4 },
+
+    { "from": 6, "to": 14, "type": "spouse" },
+    { "from": 6, "to": 16, "type": "parent", "parent1id": 6, "parent2id": 14 },
+    { "from": 6, "to": 17, "type": "parent", "parent1id": 6, "parent2id": 14 },
+
+    { "from": 7, "to": 15, "type": "spouse" },
+    { "from": 7, "to": 18, "type": "parent", "parent1id": 7, "parent2id": 15 },
+    { "from": 7, "to": 19, "type": "parent", "parent1id": 7, "parent2id": 15 },
+
+    { "from": 9, "to": 8, "type": "spouse" },
+    { "from": 9, "to": 12, "type": "parent", "parent1id": 9, "parent2id": 8 },
+    { "from": 9, "to": 13, "type": "parent", "parent1id": 9, "parent2id": 8 },
+
+    { "from": 10, "to": 11, "type": "spouse" }
   ]
 }
