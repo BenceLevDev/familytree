@@ -1,23 +1,39 @@
 .viewport {
+  position: fixed;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   cursor: grab;
+  background-color: #ffffff; /* VAGY bármilyen szín, a lényeg, hogy ne legyen 'transparent' */
+  cursor: grab !important; /* Kényszerítsük a nyitott tenyeret */
+  z-index: 1;
+  top: 0;
+  left: 0;
 }
 
 .viewport.grabbing {
-  user-select: none;
+  cursor: grabbing !important;
+}
+
+.connections-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Hogy ne zavarja az egér eseményeket */
+  z-index: 0;
 }
 
 .family-tree {
-  cursor: grab;
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   align-items: flex-start;
-  gap: 16px;
-  flex-wrap: wrap;
+  gap: 250px;
+  flex-wrap: nowrap;
   padding: 40px;
-}
-
-.viewport:active {
-  cursor: grabbing;
+  user-select: none;
+  width: max-content;
 }
