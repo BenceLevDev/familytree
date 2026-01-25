@@ -5,32 +5,58 @@
       "last_name": "Gipsz",
       "first_name": "Jakab",
       "gender": "male",
-      "image": "/src/assets/prof_pic.png"
+      "image": "/src/assets/prof_pic.png",
+      "generation": 1
     },
     {
       "id": 2,
       "last_name": "Gipszné",
       "first_name": "Dóra Emese",
-      "gender": "female"
+      "gender": "female",
+      "generation": 1
     },
     {
       "id": 3,
       "first_name": "Péter",
       "last_name": "Gipsz",
-      "gender": "male"
+      "gender": "male",
+      "generation": 2
     },
     {
       "id": 4,
       "last_name": "Gipsz",
       "first_name": "András",
       "gender": "male",
-      "image": "/src/assets/prof_pic.png"
+      "image": "/src/assets/prof_pic.png",
+      "generation": 1
     },
     {
       "id": 5,
       "last_name": "Gipszné",
       "first_name": "Random Nő",
-      "gender": "female"
+      "gender": "female",
+      "generation": 1
+    },
+    {
+      "id": 6,
+      "last_name": "Gomb",
+      "first_name": "Erika",
+      "gender": "female",
+      "generation": 1
+    },
+    {
+      "id": 7,
+      "last_name": "Gipsz",
+      "first_name": "Erika",
+      "gender": "female",
+      "generation": 2
+    },
+    {
+      "id": 8,
+      "last_name": "Gomb",
+      "first_name": "Erika",
+      "gender": "female",
+      "generation": 2
     }
   ],
   "relationships": [
@@ -50,6 +76,20 @@
       "type": "parent",
       "parent1id": 1,
       "parent2id": 2
+    },
+    {
+      "from": 1,
+      "to": 7,
+      "type": "parent",
+      "parent1id": 1,
+      "parent2id": 2
+    },
+    {
+      "from": 4,
+      "to": 8,
+      "type": "parent",
+      "parent1id": 4,
+      "parent2id": 5
     }
   ]
 }
