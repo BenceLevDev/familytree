@@ -10,7 +10,7 @@ function App() {
   const [zoom, setZoom] = useState(1);
 
   // Jelzi, ha épp automatikus mozgás (fókusz vagy zoom gomb) van folyamatban.
-  // Arra használjuk, hogy ilyenkor bekapcsoljuk a lusta CSS animációt (smooth-move).
+  // Arra használjuk, hogy ilyenkor bekapcsoljuk a CSS animációt (smooth-move).
   const [isAnimating, setIsAnimating] = useState(false);
 
   // Azt figyeli, hogy az egér épp le van-e nyomva a fa "húzásához" (panning).
@@ -41,8 +41,12 @@ function App() {
    * Hogyan: Bekapcsolja az animációt, átállítja a zoomot, majd 0.5mp múlva kikapcsolja az animációt.
    */
   const handleZoomChange = (newZoom) => {
+    // Math.min(newZoom, 1.2) -> Nem engedi 1.2 (120%) fölé
+    // Math.max(..., 0.2) -> Nem engedi 0.2 (20%) alá
+    const clampedZoom = Math.min(Math.max(newZoom, 0.2), 1.2);
+
     setIsAnimating(true);
-    setZoom(newZoom);
+    setZoom(clampedZoom);
     setTimeout(() => setIsAnimating(false), 500);
   };
 
@@ -135,43 +139,28 @@ function App() {
   return (
     <>
       {/* ZOOM ÉS RESET VEZÉRLŐK */}
-      <div
-        className="zoom-controls"
-        style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          zIndex: 1000,
-          background: "white",
-          padding: "10px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-        }}
-      >
-        <button onClick={() => handleZoomChange(Math.max(zoom - 0.2, 0.2))}>
-          {" "}
-          -{" "}
-        </button>
+      <div className="zoom-controls">
+        {/* Csökkentés: 20% az alja */}
+        <button onClick={() => handleZoomChange(zoom - 0.2)}> - </button>
+
         <span style={{ margin: "0 10px", fontFamily: "sans-serif" }}>
-          {" "}
-          {Math.round(zoom * 100)}%{" "}
+          {Math.round(zoom * 100)}%
         </span>
-        <button onClick={() => handleZoomChange(Math.min(zoom + 0.2, 2))}>
-          {" "}
-          +{" "}
-        </button>
+
+        {/* Növelés: 120% a teteje */}
+        <button onClick={() => handleZoomChange(zoom + 0.2)}> + </button>
+
         <button
           onClick={() => {
             setIsAnimating(true);
-            setZoom(1);
+            setZoom(1); // Reset mindig 100%
             setOffsetX(0);
             setOffsetY(0);
             setTimeout(() => setIsAnimating(false), 500);
           }}
           style={{ marginLeft: "10px" }}
         >
-          {" "}
-          Reset{" "}
+          Reset
         </button>
       </div>
 
