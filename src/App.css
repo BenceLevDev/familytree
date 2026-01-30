@@ -7,6 +7,7 @@
   cursor: grab;
   top: 0;
   left: 0;
+  touch-action: none;
 }
 
 .viewport.grabbing {
@@ -25,6 +26,8 @@
   width: max-content;
   user-select: none;
   transform-origin: 0 0; /* Ez kötelező a zoomhoz! */
+  /* Alapértelmezetten mindig legyen animáció a mozgáson (pl. zoom, focus) */
+  transition: transform 0.5s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
 .family-member-card {
@@ -32,9 +35,9 @@
   flex-shrink: 0;
 }
 
-.family-tree.smooth-move {
-  /* A 'cubic-bezier' ad egy kis rugalmasságot az elején és a végén */
-  transition: transform 0.5s cubic-bezier(0.2, 0, 0.2, 1);
+/* Ha éppen húzzuk (grabbing), akkor NE legyen animáció, hogy kövesse az egeret */
+.viewport.grabbing .family-tree {
+  transition: none !important;
 }
 
 .generation-row {
@@ -60,8 +63,8 @@
 
 .zoom-controls {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  top: 20px;
+  left: 20px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -78,4 +81,33 @@
   border: 1px solid #ddd;
   background: #f9f9f9;
   font-weight: bold;
+}
+
+.sidebar-toggle-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1100; /* Legyen a sidebar felett */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.information-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 20%;
+  height: 100vh;
+  background-color: white;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  padding-top: 80px; /* Hely a gombnak */
+  transform: translateX(100%); /* Alapból rejtve (jobbra tolva) */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth animáció */
+}
+
+.information-sidebar.open {
+  transform: translateX(0); /* Becsúszik */
 }
