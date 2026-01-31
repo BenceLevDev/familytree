@@ -5,12 +5,22 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
-  background-color: #f5f5f5;
-  cursor: grab;
-  touch-action: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Megakadályozza a fehér rész megjelenését görgetéskor */
+  background-color: #f5f5f5; /* Állítsd be ugyanarra, mint a family-tree háttere */
 }
-
+html,
+body {
+  background-color: #f5f5f5; /* Ez legyen a "védőháló" */
+}
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Ne engedjük a főoldalt görgetni, csak a fát a JS-el */
+  width: 100%;
+  height: 100%;
+}
 .viewport.grabbing {
   cursor: grabbing;
 }

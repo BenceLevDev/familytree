@@ -12,7 +12,8 @@ function App() {
   const MAX_ZOOM = 1.2;
 
   // --- 1. ÁLLAPOTOK (STATE) ÉS REFERENCIÁK (REF) ---
-  const [zoom, setZoom] = useState(1);
+  const initialZoom = window.innerWidth < 845 ? 0.2 : 1;
+  const [zoom, setZoom] = useState(initialZoom);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isGrabbing, setIsGrabbing] = useState(false);
   const [offsetX, setOffsetX] = useState(0);
@@ -43,20 +44,79 @@ function App() {
     }, ANIMATION_DURATION);
   };
 
+  /**
+   * A teljes családfát a képernyő közepére igazítja.
+   */
+  const centerTree = () => {
+    const treeEl = document.querySelector(".family-tree");
+    if (!treeEl) return;
+
+    const treeWidth = treeEl.offsetWidth;
+    const treeHeight = treeEl.offsetHeight;
+
+    // Itt közvetlenül állítjuk be az új értékeket
+    setOffsetX(window.innerWidth / 2 - (treeWidth / 2) * zoom);
+    setOffsetY(window.innerHeight / 2 - (treeHeight / 2) * zoom);
+
+    // Az animációt csak egy hajszállal később indítjuk
+    requestAnimationFrame(() => {
+      triggerAnimation();
+    });
+  };
+
   const handleZoomChange = (newZoom) => {
-    // 3. itt megkapja az uj zoomot
-    const clampedZoom = Math.min(Math.max(newZoom, MIN_ZOOM), MAX_ZOOM); // 4. leellenőrzi, hogy az új zoom érték a megfelelő határok között van e
-    setZoom(clampedZoom); // 6. beállítja az új zoomot és átadja a zoom value-nak
+    const clampedZoom = Math.min(Math.max(newZoom, MIN_ZOOM), MAX_ZOOM);
+
+    // Zoom a képernyő középpontjához viszonyítva
+    const zoomFactor = clampedZoom / zoom;
+
+    setOffsetX(
+      (prevX) =>
+        window.innerWidth / 2 - (window.innerWidth / 2 - prevX) * zoomFactor,
+    );
+    setOffsetY(
+      (prevY) =>
+        window.innerHeight / 2 - (window.innerHeight / 2 - prevY) * zoomFactor,
+    );
+
+    setZoom(clampedZoom);
     triggerAnimation();
   };
 
   const handleReset = () => {
-    //kezeli a zoom resetet
-    setZoom(1);
-    setOffsetX(0);
-    setOffsetY(0);
+    // Itt is eldöntjük, mi legyen a cél-zoom a kijelző alapján
+    const targetZoom = window.innerWidth < 845 ? 0.2 : 1;
+    setZoom(targetZoom);
+
+    const treeEl = document.querySelector(".family-tree");
+    if (treeEl) {
+      // Fontos: a targetZoom-mal számolunk az offsetX/Y-nál is!
+      setOffsetX(window.innerWidth / 2 - (treeEl.offsetWidth / 2) * targetZoom);
+      setOffsetY(
+        window.innerHeight / 2 - (treeEl.offsetHeight / 2) * targetZoom,
+      );
+    }
+
+    setSelectedMember(null);
     triggerAnimation();
   };
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      // Kis késleltetés kell, hogy a böngésző biztosan végezzen az elforgatással
+      setTimeout(() => {
+        centerTree();
+      }, 100);
+    };
+
+    window.addEventListener("resize", handleResize);
+    // orientationchange esemény is biztos ami biztos
+    window.addEventListener("orientationchange", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
+    };
+  }, [zoom]); // Ha változik a zoom, az elforgatáskor is az aktuális zoommal számoljon
 
   /**
    * Tiltja az alapértelmezett böngésző-zoomot (Ctrl + görgő).
@@ -70,6 +130,18 @@ function App() {
   }, []);
 
   /**
+   * Automatikus középre igazítás az első betöltéskor, amint megvannak a pozíciók.
+   */
+  useLayoutEffect(() => {
+    if (Object.keys(positions).length > 0 && offsetX === 0 && offsetY === 0) {
+      const timer = setTimeout(() => {
+        centerTree();
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [positions, offsetX, offsetY]);
+
+  /**
    * Egy adott családtagot a képernyő közepére igazít.
    */
   const focusOnMember = (id) => {
@@ -79,8 +151,6 @@ function App() {
     const member = members.find((m) => m.id == id);
     setSelectedMember(member);
 
-    // A cél: a kártya közepe legyen a képernyő közepén
-    // Képernyő közepe - (Kártya helye a fán * aktuális nagyítás)
     const targetX = window.innerWidth / 2 - pos.centerX * zoom;
     const targetY = window.innerHeight / 2 - pos.centerY * zoom;
 
@@ -107,29 +177,17 @@ function App() {
 
   // --- 3. KOORDINÁTÁK MÉRÉSE ÉS SZINKRONIZÁLÁSA ---
 
-  /**
-   * Leméri a családtag kártyák pozícióját a DOM-ban az összekötő vonalak rajzolásához.
-   */
   useLayoutEffect(() => {
     const measure = () => {
       const newPositions = {};
       members.forEach((member) => {
         const el = memberRefs.current[member.id];
-        // A .family-tree-t keressük, de fontos, hogy a méréshez
-        // az eltolástól (offset) és zoomtól mentes alapot nézzük
         if (el) {
-          // offsetLeft/Top használata megbízhatóbb, mert ezek
-          // a szülőhöz képesti fix távolságok, nem érinti őket a CSS transform scale
           const rect = {
             width: el.offsetWidth,
             height: el.offsetHeight,
-            left: el.offsetLeft,
-            top: el.offsetTop,
           };
 
-          // Mivel a .generation-row és a .family-tree flexbox/gap alapú,
-          // az offsetLeft a közvetlen szülőhöz (.generation-row) képest értendő.
-          // Ahhoz, hogy a teljes fához képest kapjunk koordinátát:
           let parent = el.offsetParent;
           let totalLeft = el.offsetLeft;
           let totalTop = el.offsetTop;
@@ -152,7 +210,6 @@ function App() {
       setPositions(newPositions);
     };
 
-    // Animáció esetén a mérést az animáció végére időzítjük.
     if (isAnimating) {
       const timer = setTimeout(measure, ANIMATION_DURATION);
       return () => clearTimeout(timer);
@@ -163,10 +220,7 @@ function App() {
 
   // --- 4. POINTER EVENT HANDLERS for PANNING ---
   const handlePointerDown = (e) => {
-    // Ha kártyára kattintunk, ne kezdjük el a mozgatást, hogy a klikk esemény átmenjen
-    if (e.target.closest(".family-member-card")) {
-      return;
-    }
+    if (e.target.closest(".family-member-card")) return;
 
     e.preventDefault();
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -201,10 +255,10 @@ function App() {
     <>
       <InformationSidebar selectedMember={selectedMember} />
 
-      <ZoomControls // 2. Itt aktiválódik a korábban benyomott gomb.
-        zoom={zoom} // zoom értéket mekapja, by default 1
-        onZoomIn={() => handleZoomChange(zoom + 0.2)} // ha onZoomIn lett benyomva, akkor a zoom(default 1) + 0.2 értéket kapja a handleZoomChange
-        onZoomOut={() => handleZoomChange(zoom - 0.2)} // ha onZoomOut lett benyomva, akkor a zoom(default 1) - 0.2 értéket kapja a handleZoomChange
+      <ZoomControls
+        zoom={zoom}
+        onZoomIn={() => handleZoomChange(zoom + 0.2)}
+        onZoomOut={() => handleZoomChange(zoom - 0.2)}
         onReset={handleReset}
       />
 
