@@ -76,15 +76,16 @@ function App() {
     const pos = positions[id];
     if (!pos) return;
 
-    const viewportMidX = window.innerWidth / 2;
-    const viewportMidY = window.innerHeight / 2;
-
-    // Megkeressük a kiválasztott tag adatait és beállítjuk
     const member = members.find((m) => m.id == id);
     setSelectedMember(member);
 
-    setOffsetX(viewportMidX - pos.centerX * zoom);
-    setOffsetY(viewportMidY - pos.centerY * zoom);
+    // A cél: a kártya közepe legyen a képernyő közepén
+    // Képernyő közepe - (Kártya helye a fán * aktuális nagyítás)
+    const targetX = window.innerWidth / 2 - pos.centerX * zoom;
+    const targetY = window.innerHeight / 2 - pos.centerY * zoom;
+
+    setOffsetX(targetX);
+    setOffsetY(targetY);
     triggerAnimation();
   };
 
@@ -114,19 +115,37 @@ function App() {
       const newPositions = {};
       members.forEach((member) => {
         const el = memberRefs.current[member.id];
-        const treeEl = el?.closest(".family-tree");
+        // A .family-tree-t keressük, de fontos, hogy a méréshez
+        // az eltolástól (offset) és zoomtól mentes alapot nézzük
+        if (el) {
+          // offsetLeft/Top használata megbízhatóbb, mert ezek
+          // a szülőhöz képesti fix távolságok, nem érinti őket a CSS transform scale
+          const rect = {
+            width: el.offsetWidth,
+            height: el.offsetHeight,
+            left: el.offsetLeft,
+            top: el.offsetTop,
+          };
 
-        if (el && treeEl) {
-          const rect = el.getBoundingClientRect();
-          const parentRect = treeEl.getBoundingClientRect();
+          // Mivel a .generation-row és a .family-tree flexbox/gap alapú,
+          // az offsetLeft a közvetlen szülőhöz (.generation-row) képest értendő.
+          // Ahhoz, hogy a teljes fához képest kapjunk koordinátát:
+          let parent = el.offsetParent;
+          let totalLeft = el.offsetLeft;
+          let totalTop = el.offsetTop;
 
-          // A mérést korrigáljuk a zoom mértékével, hogy az SVG koordináták helyesek legyenek.
+          while (parent && !parent.classList.contains("family-tree")) {
+            totalLeft += parent.offsetLeft;
+            totalTop += parent.offsetTop;
+            parent = parent.offsetParent;
+          }
+
           newPositions[member.id] = {
-            centerX: (rect.left - parentRect.left + rect.width / 2) / zoom,
-            centerY: (rect.top - parentRect.top + rect.height / 2) / zoom,
-            right: (rect.right - parentRect.left) / zoom,
-            left: (rect.left - parentRect.left) / zoom,
-            topY: (rect.top - parentRect.top) / zoom,
+            centerX: totalLeft + rect.width / 2,
+            centerY: totalTop + rect.height / 2,
+            right: totalLeft + rect.width,
+            left: totalLeft,
+            topY: totalTop,
           };
         }
       });
