@@ -25,10 +25,10 @@
 .family-member-info-wo-img {
   display: flex;
   flex-direction: column; /* Egymás mellé kerüljön a két név */
-  font-size: 28px;
+  font-size: 24px;
   padding-left: 40px;
   flex-grow: 1; /* Kitölti a maradék helyet, hogy az ikon a szélére kerüljön */
-  gap: 10px;
+  gap: 5px;
   text-align: start;
 }
 

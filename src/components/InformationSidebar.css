@@ -1,23 +1,134 @@
-.information-sidebar-opened {
-  width: 20%;
-  height: 100vh;
-  background: #f2f2f2;
-  padding: 20px;
+/* --- 1. ALAP STÍLUSOK (Desktop) --- */
+.sidebar-content-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  font-family: "Montserrat", sans-serif;
+  margin: 0 25px;
+  gap: 10px;
+  padding-bottom: 120px;
 }
 
-.sidebar-button {
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  cursor: pointer;
+.sidebar-content-container h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
 }
+
+/* Szekciók és alcímek */
+.sidebar-section {
+  margin-top: 30px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.section-title {
+  font-size: 24px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+}
+
+/* Adat sorok */
+.sidebar-content {
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sidebar-content-row {
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.sidebar-content-row p {
+  margin: 0;
+  white-space: pre-line;
+}
+
+.sidebar-content-row p strong {
+  transition: color 0.2s ease;
+}
+
+/* Linkek és Ikonok */
 .sidebar-icon {
-  width: 60px;
-  height: 60px;
+  width: 30px;
+  height: 30px;
   transition: opacity 0.2s ease;
 }
 
-.sidebar-button:hover .sidebar-icon {
-  opacity: 0.2; /* 100% helyett 60% láthatóság */
-  transition: opacity 0.2s ease; /* Hogy ne ugorjon, hanem szépen halványuljon */
+.links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.sidebar-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-link:hover {
+  background-color: #f0f7ff;
+  padding-left: 10px;
+}
+
+/* --- 2. RESPONZÍV FINOMÍTÁSOK --- */
+
+/* Tablet / Kisebb Laptop (845px alatt) */
+@media (max-width: 845px) {
+  .sidebar-content-container {
+    margin: 0 15px;
+  }
+
+  .sidebar-content-container h2 {
+    font-size: 24px;
+  }
+
+  .section-title,
+  .sidebar-content {
+    font-size: 16px;
+  }
+
+  .sidebar-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sidebar-link {
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+}
+
+/* Mobil (480px alatt) */
+@media (max-width: 480px) {
+  .sidebar-content-row {
+    display: flex;
+    flex-direction: column; /* Egymás alá kerül a fejléc és az érték */
+    gap: 4px;
+    line-height: 1.2;
+    margin-bottom: 15px;
+  }
+
+  .sidebar-content-row p strong {
+    font-size: 13px;
+    color: #b1b1b1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .sidebar-content {
+    font-size: 18px; /* Mobilon picit emeljük vissza az olvashatóságért */
+  }
 }

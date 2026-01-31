@@ -17,7 +17,6 @@ const FamilyMemberCard = forwardRef(
             <span>{first_name}</span>
           </div>
         )}
-        <button className="info-btn">i</button>
       </div>
     );
   },

@@ -1,12 +1,13 @@
+/* --- 1. ALAPOK ÉS VIEWPORT (A családfa tartálya) --- */
 .viewport {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   background-color: #f5f5f5;
   cursor: grab;
-  top: 0;
-  left: 0;
   touch-action: none;
 }
 
@@ -14,28 +15,22 @@
   cursor: grabbing;
 }
 
+/* --- 2. CSALÁDFA VÁZ (Generációk és elrendezés) --- */
 .family-tree {
   position: relative;
   top: 0;
   left: 0;
   display: flex;
-  flex-direction: column; /* Generációk egymás alatt */
+  flex-direction: column;
   align-items: center;
-  gap: 120px; /* Távolság a generációk között */
+  gap: 120px;
   padding: 100px;
   width: max-content;
   user-select: none;
-  transform-origin: 0 0; /* Ez kötelező a zoomhoz! */
-  /* Alapértelmezetten mindig legyen animáció a mozgáson (pl. zoom, focus) */
+  transform-origin: 0 0;
   transition: transform 0.5s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
-.family-member-card {
-  width: 300px; /* Legyen fix, ne a tartalom fújja fel */
-  flex-shrink: 0;
-}
-
-/* Ha éppen húzzuk (grabbing), akkor NE legyen animáció, hogy kövesse az egeret */
 .viewport.grabbing .family-tree {
   transition: none !important;
 }
@@ -44,35 +39,48 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 60px; /* Távolság a kártyák között egy soron belül */
+  gap: 60px;
 }
 
+.family-member-card {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+/* --- 3. ÖSSZEKÖTŐ VONALAK (SVG réteg) --- */
 .connections-layer {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* A kártyák mögött legyen */
+  z-index: -1;
+  shape-rendering: geometricPrecision; /* Segít a vonalak élsimításában és helyén tartásában */
+  pointer-events: none;
 }
 
 .connections-layer path {
-  transition: stroke 0.3s ease; /* Később jól jöhet, ha hover effektet akarsz */
+  transition: stroke 0.3s ease;
   filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.1));
 }
 
-.zoom-controls {
+/* --- 4. VEZÉRLŐK (Zoom és Toggle gombok) --- */
+.zoom-controls,
+.sidebar-toggle-button {
   position: fixed;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.zoom-controls {
   top: 20px;
   left: 20px;
   display: flex;
   align-items: center;
   gap: 10px;
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  z-index: 1000; /* Legyen minden felett */
+  z-index: 1000;
 }
 
 .zoom-controls button {
@@ -84,30 +92,69 @@
 }
 
 .sidebar-toggle-button {
-  position: fixed;
   top: 20px;
-  right: 20px;
-  z-index: 1100; /* Legyen a sidebar felett */
-  background: none;
-  border: none;
+  right: 40px;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   cursor: pointer;
-  padding: 0;
+  border: none;
 }
 
+/* --- 5. INFORMATION SIDEBAR (Adatlap) --- */
 .information-sidebar {
   position: fixed;
   top: 0;
   right: 0;
-  width: 20%;
+  width: 25%; /* Megemeltem kicsit, a 20% mobilon/tableten nagyon kevés */
+  min-width: 320px;
   height: 100vh;
   background-color: white;
   box-shadow: -4px 0 15px rgba(0, 0, 0, 0.3);
   z-index: 1000;
-  padding-top: 80px; /* Hely a gombnak */
-  transform: translateX(100%); /* Alapból rejtve (jobbra tolva) */
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth animáció */
+  padding-top: 80px;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto; /* 'auto' jobb, mint a force 'scroll' */
+  box-sizing: border-box;
 }
 
 .information-sidebar.open {
-  transform: translateX(0); /* Becsúszik */
+  transform: translateX(0);
+}
+
+/* Egyéni görgetősáv */
+.information-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.information-sidebar::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+/* --- 6. RESZPONZÍV BEÁLLÍTÁSOK (Mobil és Tablet) --- */
+@media (max-width: 845px) {
+  .zoom-controls {
+    top: 15px;
+    left: 15px;
+    padding: 5px;
+    gap: 5px;
+  }
+
+  .zoom-controls button {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .sidebar-toggle-button {
+    top: 15px;
+    right: 15px;
+    padding: 8px;
+  }
+
+  .information-sidebar {
+    width: 100%;
+    padding-top: 70px;
+  }
 }
