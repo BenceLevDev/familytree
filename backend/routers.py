@@ -463,3 +463,7 @@ def get_search_list(db: Session = Depends(get_db), current_user: AppUser = Depen
         })
     
     return result
+
+@router.get("/health")
+def health_check():
+    return {"status": "awake"}
