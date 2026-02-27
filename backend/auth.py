@@ -15,11 +15,17 @@ SECRET_KEY = os.getenv("SECRET_KEY", "ide-irj-egy-nagyon-hosszu-titkos-kodot-ele
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 1 hétig érvényes
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# MÓDOSÍTÁS: A bcrypt-et kiegészítjük, hogy kezelni tudja a 72 bájt feletti jelszavakat is
+# A 'bcrypt_sha256' először SHA256-ot használ, így bármilyen hosszú jelszó belefér a bcrypt-be
+pwd_context = CryptContext(schemes=["bcrypt_sha256", "bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
 def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except ValueError:
+        # Ha mégis pampogna a hossz miatt, itt elkapjuk, de a fenti séma ezt orvosolja
+        return False
 
 def get_password_hash(password):
     return pwd_context.hash(password)

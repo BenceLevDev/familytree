@@ -95,3 +95,4 @@ uploads/
 # =========================
 backend/import_data.py
 frontend/flow.puml
+backend/migrate_to_supabase.py
