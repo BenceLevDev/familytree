@@ -25,6 +25,7 @@ Thumbs.db
 family.db
 *.sqlite3
 *.db
+familyMembers.json
 
 # =========================
 # BACKEND (Python / FastAPI)
@@ -75,4 +76,22 @@ pnpm-debug.log*
 uploads/
 
 
-node_modules/
+# =========================
+# TOVÁBBI SQLITE FÁJLOK
+# =========================
+# (Az adatbázis tranzakciók közben keletkező átmeneti fájlok)
+*.db-journal
+*.db-shm
+*.db-wal
+
+# =========================
+# FRONTEND CACHE (Vite & ESLint)
+# =========================
+.eslintcache
+.vite/
+
+# =========================
+# LOKÁLIS SCRIPTEK / DOKSIK (Opcionális)
+# =========================
+backend/import_data.py
+frontend/flow.puml
