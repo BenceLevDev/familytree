@@ -1,10 +1,11 @@
 import os
+import jwt
+import bcrypt
+import hashlib
 from datetime import datetime, timedelta, timezone
 from typing import Optional
-import jwt
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 # Importáljuk a saját fájljainkat
@@ -15,20 +16,42 @@ SECRET_KEY = os.getenv("SECRET_KEY", "ide-irj-egy-nagyon-hosszu-titkos-kodot-ele
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 1 hétig érvényes
 
-# MÓDOSÍTÁS: A bcrypt-et kiegészítjük, hogy kezelni tudja a 72 bájt feletti jelszavakat is
-# A 'bcrypt_sha256' először SHA256-ot használ, így bármilyen hosszú jelszó belefér a bcrypt-be
-pwd_context = CryptContext(schemes=["bcrypt_sha256", "bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
-def verify_password(plain_password, hashed_password):
+def _prepare_password(password: str) -> bytes:
+    """
+    Segédfüggvény: SHA256-al előkészíti a jelszót, hogy 
+    soha ne lépje át a bcrypt 72 bájtos korlátját.
+    """
+    return hashlib.sha256(password.encode("utf-8")).hexdigest().encode("utf-8")
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+    Ellenőrzi a jelszót. Kezeli a régi típusú és az új, 
+    SHA256-al előkészített jelszavakat is.
+    """
     try:
-        return pwd_context.verify(plain_password, hashed_password)
-    except ValueError:
-        # Ha mégis pampogna a hossz miatt, itt elkapjuk, de a fenti séma ezt orvosolja
+        # 1. Próbálkozás: Az új, biztonságosabb (SHA256 + bcrypt) módszerrel
+        prepared_password = _prepare_password(plain_password)
+        if bcrypt.checkpw(prepared_password, hashed_password.encode("utf-8")):
+            return True
+    except Exception:
+        pass
+
+    try:
+        # 2. Próbálkozás: A régi, sima bcrypt módszerrel (a migrált adatokhoz)
+        return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
+    except Exception:
         return False
 
-def get_password_hash(password):
-    return pwd_context.hash(password)
+def get_password_hash(password: str) -> str:
+    """
+    Létrehozza a jelszó hash-ét az új, biztonságos módszerrel.
+    """
+    prepared_password = _prepare_password(password)
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(prepared_password, salt)
+    return hashed.decode("utf-8")
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
