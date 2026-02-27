@@ -66,18 +66,21 @@ function App() {
     e.preventDefault();
     setUserRegMessage("");
     try {
-      const res = await fetch("http://localhost:8000/api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // A token hitelesíti, hogy admin vagy
+      const res = await fetch(
+        "https://familytree-backend-9ua6.onrender.com/api/users/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // A token hitelesíti, hogy admin vagy
+          },
+          body: JSON.stringify({
+            username: newUsername,
+            password: newPassword,
+            is_admin: newIsAdmin ? 1 : 0,
+          }),
         },
-        body: JSON.stringify({
-          username: newUsername,
-          password: newPassword,
-          is_admin: newIsAdmin ? 1 : 0,
-        }),
-      });
+      );
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.detail || "Hiba történt a regisztráció során.");
@@ -100,7 +103,7 @@ function App() {
   useEffect(() => {
     if (!token) return;
 
-    fetch("http://localhost:8000/api/data", {
+    fetch("https://familytree-backend-9ua6.onrender.com/api/data", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -222,7 +225,7 @@ function App() {
     const pos = positions[id];
     if (!pos) return;
 
-    fetch(`http://localhost:8000/api/member/${id}`, {
+    fetch(`https://familytree-backend-9ua6.onrender.com/api/member/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -269,7 +269,7 @@ function InformationSidebar({
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/api/member/${selectedMember.id}/update`,
+        `https://familytree-backend-9ua6.onrender.com/api/member/${selectedMember.id}/update`,
         {
           method: "PUT",
           headers: {

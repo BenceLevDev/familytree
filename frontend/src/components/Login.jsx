@@ -16,13 +16,16 @@ function Login({ onLoginSuccess }) {
     formData.append("password", password);
 
     try {
-      const response = await fetch("http://localhost:8000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+      const response = await fetch(
+        "https://familytree-backend-9ua6.onrender.com/api/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: formData.toString(),
         },
-        body: formData.toString(),
-      });
+      );
 
       if (!response.ok) {
         throw new Error("Hibás felhasználónév vagy jelszó!");

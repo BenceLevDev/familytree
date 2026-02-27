@@ -10,7 +10,7 @@ const RegistrationForm = ({ onMemberCreated, onCancel, token }) => {
     const fetchMembers = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8000/api/members/search-list",
+          "https://familytree-backend-9ua6.onrender.com/api/members/search-list",
           {
             headers: {
               Authorization: `Bearer ${token}`,
