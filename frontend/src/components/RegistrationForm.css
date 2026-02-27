@@ -1,0 +1,128 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+.registration-form-container form {
+  display: flex;
+  flex-direction: column;
+  width: 350px; /* Hasonló szélesség, mint a kártyák vagy a sidebar */
+  max-height: 80vh; /* Ne lógjon le a képernyőről */
+  overflow-y: auto;
+  padding: 10px;
+  scrollbar-width: thin; /* Firefox-nak */
+}
+
+/* Egyéni görgetősáv az űrlaphoz (mint a sidebar-nál) */
+.registration-form-container form::-webkit-scrollbar {
+  width: 6px;
+}
+.registration-form-container form::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+.registration-form-container h1,
+.registration-form-container h3 {
+  margin: 10px 0;
+  color: #333;
+  font-family: sans-serif;
+}
+
+.registration-form-container h1 {
+  font-size: 1.2rem;
+}
+.registration-form-container h3 {
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+.registration-form-container label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #666;
+  margin-top: 10px;
+  margin-bottom: 3px;
+}
+
+.registration-form-container input[type="text"],
+.registration-form-container textarea {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fdfdfd;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.registration-form-container input:focus,
+.registration-form-container textarea:focus {
+  outline: none;
+  border-color: #aaa;
+}
+
+.registration-form-container textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+.registration-form-container section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.registration-form-spec-container {
+  display: flex;
+  width: 100%;
+  padding: 25px 0px;
+}
+
+.registration-form-container input[type="submit"] {
+  flex: 1;
+  margin-top: 0; /* Nullázzuk a korábbi margint, mert a konténer kezeli */
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+.registration-form-container input[type="submit"] {
+  padding: 10px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.registration-form-container input[type="submit"]:hover {
+  background: #f0f0f0;
+}
+
+.creation-input-field {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Mobilnézetben az űrlap szélesebb lehet */
+@media (max-width: 845px) {
+  .registration-form-container {
+    top: 70px;
+    left: 10px;
+    right: 10px; /* Kitölti a szélességet */
+  }
+  .registration-form-container form {
+    width: 100%;
+  }
+}

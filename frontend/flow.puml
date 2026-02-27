@@ -1,0 +1,92 @@
+@startuml
+!theme plain
+title Családfa Alkalmazás Folyamatdiagramja
+
+actor Felhasználó as User
+
+participant "App.jsx" as App
+participant "ZoomControls.jsx" as ZoomControls
+participant "FamilyTreeCanvas.jsx" as Canvas
+participant "ConnectionsLayer.jsx" as Connections
+participant "FamilyMemberCard.jsx" as Card
+participant "Böngésző DOM / Események" as DOM
+
+== Alkalmazás indulása és Első Renderelés ==
+
+App -> App: Állapotok inicializálása (zoom, offset, stb.)
+App -> App: `sortedGenerations` kiszámítása (`useMemo`)
+App -> Canvas: Renderelés (props átadása)
+Canvas -> Connections: Renderelés
+Canvas -> Card: Renderelés (minden tagnak)
+Card -> App: `ref` regisztrálása (`memberRefs`)
+
+group Első mérés és vonalrajzolás
+    activate App
+    App -> DOM: `useLayoutEffect` (mérés) elindul
+    DOM --> App: Visszaadja a kártya DOM elemeket (`memberRefs`)
+    App -> App: `measure()`: pozíciók kiszámítása
+    App -> App: `setPositions()` állapot frissítése
+    deactivate App
+
+    note right of App: Újra-renderelés a `positions` állapot változása miatt
+
+    App -> Canvas: Renderelés új `positions` proppal
+    Canvas -> Connections: Renderelés új `positions` proppal
+    Connections -> Connections: SVG vonalak kirajzolása a pozíciók alapján
+end
+
+== Felhasználói interakció: Fókuszálás egy tagra ==
+
+User -> Card: Kattintás a kártyára
+Card -> Canvas: `onMemberClick(id)` hívása
+Canvas -> App: `focusOnMember(id)` hívása
+
+group Animált fókuszálás
+    activate App
+    App -> App: `setIsAnimating(true)`
+    App -> App: `setOffsetX`, `setOffsetY` hívása az új pozíciókkal
+    note right of App: Újra-renderelés, a CSS animáció elindul
+    App -> DOM: `setTimeout` indítása az animáció végére
+    deactivate App
+
+    ... `ANIMATION_DURATION` múlva ...
+
+    DOM -> App: `setTimeout` lejár, `setIsAnimating(false)`
+end
+
+== Felhasználói interakció: Zoomolás ==
+
+User -> ZoomControls: Zoom gomb kattintás
+ZoomControls -> App: `handleZoomChange(newZoom)` hívása
+
+group Animált zoomolás
+    activate App
+    App -> App: `setIsAnimating(true)`
+    App -> App: `setZoom(clampedZoom)` hívása
+    note right of App: Újra-renderelés, a CSS animáció elindul
+    App -> DOM: `setTimeout` indítása az animáció végére
+    deactivate App
+
+    ... `ANIMATION_DURATION` múlva ...
+
+    DOM -> App: `setTimeout` lejár, `setIsAnimating(false)`
+    note right of App: A `zoom` változása miatt a `useLayoutEffect` újra lefut
+    App -> App: `measure()` és `setPositions()` az új méretekkel
+end
+
+== Felhasználói interakció: Húzás (Panning) ==
+
+User -> DOM: Egér/ujj lenyomása a `.viewport`-on
+DOM -> App: `handlePointerDown` esemény
+App -> App: `setIsGrabbing(true)`
+
+User -> DOM: Egér/ujj mozgatása
+DOM -> App: `handlePointerMove` esemény
+App -> App: `setOffsetX`, `setOffsetY` frissítése a mozgás alapján
+note right of App: Folyamatos újra-renderelés a húzás alatt
+
+User -> DOM: Egér/ujj felengedése
+DOM -> App: `handlePointerUp` esemény
+App -> App: `setIsGrabbing(false)`
+
+@enduml

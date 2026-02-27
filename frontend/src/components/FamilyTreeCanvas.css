@@ -1,0 +1,35 @@
+/* --- 1. CSALÁDFA VÁZ (Generációk és elrendezés) --- */
+.family-tree {
+  position: relative;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 200px;
+  padding: 100px;
+  width: max-content;
+  user-select: none;
+  transform-origin: 0 0;
+  transition: transform 0.5s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.generation-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  gap: 60px;
+}
+
+/* ÚJ: Házaspárok csoportosítása */
+.couple-group {
+  display: flex;
+  flex-direction: row;
+  gap: 50px; /* Távolság a házaspárok kártyái között */
+  align-items: center;
+  /* Opcionális: keret vagy háttér, ha vizuálisan is össze akarod kötni őket */
+  /* border: 1px dashed #ccc; */
+  /* padding: 10px; */
+  /* border-radius: 20px; */
+}
