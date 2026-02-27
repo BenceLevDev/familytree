@@ -2,7 +2,7 @@
 .registration-form-container form {
   display: flex;
   flex-direction: column;
-  width: 350px; /* Hasonló szélesség, mint a kártyák vagy a sidebar */
+  width: 100%-10%; /* Hasonló szélesség, mint a kártyák vagy a sidebar */
   max-height: 80vh; /* Ne lógjon le a képernyőről */
   overflow-y: auto;
   padding: 10px;
