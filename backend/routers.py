@@ -103,6 +103,7 @@ def create_member(member_data: MemberCreation, db: Session = Depends(get_db), cu
         foglalkozas_tortenet=member_data.foglalkozas
     )
     db.add(new_member)
+    db.flush()
 
     def clean_id(val):
         if val == "" or val is None: return None
