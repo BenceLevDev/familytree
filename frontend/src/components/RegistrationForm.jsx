@@ -195,14 +195,17 @@ const RegistrationForm = ({ onMemberCreated, onCancel, token }) => {
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/member", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        "https://familytree-backend-9ua6.onrender.com/api/member",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-      });
+      );
 
       if (response.ok) {
         const newMember = await response.json();
